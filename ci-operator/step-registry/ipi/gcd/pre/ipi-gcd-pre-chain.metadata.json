@@ -1,0 +1,10 @@
+{
+	"path": "ipi/gcd/pre/ipi-gcd-pre-chain.yaml",
+	"owners": {
+		"approvers": [
+			"patrickdillon",
+			"rochacbruno",
+			"tthvo"
+		]
+	}
+}

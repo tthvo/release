@@ -1,0 +1,30 @@
+ref:
+  as: ipi-conf-gcd-wif-auth
+  from_image:
+    namespace: ocp
+    name: "4.18"
+    tag: upi-installer
+  commands: ipi-conf-gcd-wif-auth-commands.sh
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+  env:
+  - name: AWS_CONFIG_FILE
+    default: "/var/run/secrets/aws/config/config"
+    documentation: |-
+      Path to the AWS config file injected by ci-ops. Contains the
+      identity chain profiles used by GCD WIF for authentication.
+  - name: AWS_PROFILE
+    default: "hub"
+    documentation: |-
+      The AWS profile to use for GCD WIF authentication. Must be "hub"
+      because GCD WIF trusts only the hub account (320297955214).
+  - name: GOOGLE_CLOUD_UNIVERSE_DOMAIN
+    default: "apis-berlin-build0.goog"
+    documentation: |-
+      The universe domain for Google Cloud Dedicated.
+  documentation: |-
+    Sets up Workload Identity Federation authentication for Google Cloud
+    Dedicated (GCD). Configures the AWS identity chain that GCD's WIF pool
+    trusts, and authenticates gcloud with the WIF credential config.

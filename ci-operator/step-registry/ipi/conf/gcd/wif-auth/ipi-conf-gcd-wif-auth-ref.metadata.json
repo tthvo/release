@@ -1,0 +1,10 @@
+{
+	"path": "ipi/conf/gcd/wif-auth/ipi-conf-gcd-wif-auth-ref.yaml",
+	"owners": {
+		"approvers": [
+			"patrickdillon",
+			"rochacbruno",
+			"tthvo"
+		]
+	}
+}

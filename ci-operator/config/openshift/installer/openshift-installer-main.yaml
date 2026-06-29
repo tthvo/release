@@ -530,6 +530,18 @@ tests:
       FEATURE_SET: TechPreviewNoUpgrade
       OS_IMAGE_STREAM: rhel-10
     workflow: openshift-e2e-aws
+- always_run: false
+  as: e2e-gcd
+  cluster: build13
+  optional: true
+  steps:
+    cluster_profile: gcd
+    env:
+      AWS_CONFIG_FILE: /var/run/secrets/aws/config/config
+      AWS_PROFILE: hub
+      COMPUTE_NODE_REPLICAS: "2"
+      GOOGLE_CLOUD_UNIVERSE_DOMAIN: apis-berlin-build0.goog
+    workflow: openshift-e2e-gcd
 - as: e2e-gcp-ovn
   run_if_changed: (gcp|google)
   steps:
