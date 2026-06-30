@@ -73,11 +73,17 @@ EOF
 
 GOOGLE_PROJECT_ID="$(< ${CLUSTER_PROFILE_DIR}/openshift_gcp_project)"
 export GCP_SHARED_CREDENTIALS_FILE="${CLUSTER_PROFILE_DIR}/gce.json"
-sa_email=$(jq -r .client_email ${GCP_SHARED_CREDENTIALS_FILE})
-if ! gcloud auth list | grep -E "\*\s+${sa_email}"
-then
-  gcloud auth activate-service-account --key-file="${GCP_SHARED_CREDENTIALS_FILE}"
+CRED_TYPE=$(jq -r .type "${GCP_SHARED_CREDENTIALS_FILE}" 2>/dev/null)
+if [[ "${CRED_TYPE}" == "external_account" ]]; then
+  gcloud auth login --cred-file="${GCP_SHARED_CREDENTIALS_FILE}" --quiet
   gcloud config set project "${GOOGLE_PROJECT_ID}"
+else
+  sa_email=$(jq -r .client_email ${GCP_SHARED_CREDENTIALS_FILE})
+  if ! gcloud auth list | grep -E "\*\s+${sa_email}"
+  then
+    gcloud auth activate-service-account --key-file="${GCP_SHARED_CREDENTIALS_FILE}"
+    gcloud config set project "${GOOGLE_PROJECT_ID}"
+  fi
 fi
 
 echo "$(date -u --rfc-3339=seconds) - Copying resource files from lib dir..."

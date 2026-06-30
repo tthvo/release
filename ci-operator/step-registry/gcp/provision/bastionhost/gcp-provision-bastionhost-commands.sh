@@ -65,8 +65,8 @@ workdir=`mktemp -d`
 # Generally we do not update boot image for bastion host very often, we just use it as a jump
 # host, mirror registry, and proxy server, these services do not have frequent update.
 # So hard-code them here.
-IMAGE_NAME="fedora-coreos-41-20241122-3-0-gcp-x86-64"
-IMAGE_PROJECT="fedora-coreos-cloud"
+IMAGE_NAME="${BASTION_IMAGE_NAME:-fedora-coreos-41-20241122-3-0-gcp-x86-64}"
+IMAGE_PROJECT="${BASTION_IMAGE_PROJECT:-fedora-coreos-cloud}"
 echo "Using ${IMAGE_NAME} image from ${IMAGE_PROJECT} project"
 
 #####################################
@@ -88,11 +88,17 @@ if [[ "${OSD_QE_PROJECT_AS_SERVICE_PROJECT}" == "yes" ]]; then
 else
   GOOGLE_PROJECT_ID="$(< ${CLUSTER_PROFILE_DIR}/openshift_gcp_project)"
   export GCP_SHARED_CREDENTIALS_FILE="${CLUSTER_PROFILE_DIR}/gce.json"
-  sa_email=$(jq -r .client_email ${GCP_SHARED_CREDENTIALS_FILE})
-  if ! gcloud auth list | grep -E "\*\s+${sa_email}"
-  then
-    gcloud auth activate-service-account --key-file="${GCP_SHARED_CREDENTIALS_FILE}"
+  CRED_TYPE=$(jq -r .type "${GCP_SHARED_CREDENTIALS_FILE}" 2>/dev/null)
+  if [[ "${CRED_TYPE}" == "external_account" ]]; then
+    gcloud auth login --cred-file="${GCP_SHARED_CREDENTIALS_FILE}" --quiet
     gcloud config set project "${GOOGLE_PROJECT_ID}"
+  else
+    sa_email=$(jq -r .client_email ${GCP_SHARED_CREDENTIALS_FILE})
+    if ! gcloud auth list | grep -E "\*\s+${sa_email}"
+    then
+      gcloud auth activate-service-account --key-file="${GCP_SHARED_CREDENTIALS_FILE}"
+      gcloud config set project "${GOOGLE_PROJECT_ID}"
+    fi
   fi
 fi
 
@@ -100,7 +106,7 @@ REGION="${LEASED_RESOURCE}"
 echo "Using region: ${REGION}"
 
 ZONE_0=$(gcloud compute regions describe ${REGION} --format=json | jq -r .zones[0] | cut -d "/" -f9)
-MACHINE_TYPE="n2-standard-2"
+MACHINE_TYPE="${BASTION_MACHINE_TYPE:-n2-standard-2}"
 
 #####################################
 ##########Create Bastion#############
