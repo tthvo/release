@@ -10,7 +10,10 @@ if [[ ! -f "${CRED_FILE}" ]]; then
   exit 1
 fi
 
-CRED_TYPE=$(jq -r .type "${CRED_FILE}")
+if ! CRED_TYPE=$(jq -er '.type' "${CRED_FILE}" 2>/dev/null); then
+  echo "ERROR: Invalid WIF credential config at ${CRED_FILE}"
+  exit 1
+fi
 if [[ "${CRED_TYPE}" != "external_account" ]]; then
   echo "ERROR: Expected external_account credential type, got ${CRED_TYPE}"
   exit 1
