@@ -7,7 +7,11 @@ set -o pipefail
 trap 'CHILDREN=$(jobs -p); if test -n "${CHILDREN}"; then kill ${CHILDREN} && wait; fi' TERM
 
 export GOOGLE_CLOUD_KEYFILE_JSON="${CLUSTER_PROFILE_DIR}/gce.json"
-gcloud auth activate-service-account --key-file="${GOOGLE_CLOUD_KEYFILE_JSON}"
+if [[ "$(jq -r .type ${GOOGLE_CLOUD_KEYFILE_JSON} 2>/dev/null)" == "external_account" ]]; then
+  gcloud auth login --cred-file="${GOOGLE_CLOUD_KEYFILE_JSON}" --quiet
+else
+  gcloud auth activate-service-account --key-file="${GOOGLE_CLOUD_KEYFILE_JSON}"
+fi
 
 if test ! -f "${SHARED_DIR}/metadata.json"
 then

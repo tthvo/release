@@ -10,6 +10,12 @@ ref:
       cpu: 10m
       memory: 100Mi
   env:
+  - name: AWS_PROFILE
+    default: "hub"
+    documentation: |-
+      The AWS profile to use for GCD WIF authentication. Must be "hub"
+      because GCD WIF trusts only the hub account. The default profile
+      points to a different target account and will fail the STS exchange.
   - name: GOOGLE_CLOUD_UNIVERSE_DOMAIN
     default: "apis-berlin-build0.goog"
     documentation: |-

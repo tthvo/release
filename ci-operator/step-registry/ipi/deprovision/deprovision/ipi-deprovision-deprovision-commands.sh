@@ -48,7 +48,10 @@ fi
 
 export AZURE_AUTH_LOCATION=$CLUSTER_PROFILE_DIR/osServicePrincipal.json
 export GOOGLE_CLOUD_KEYFILE_JSON=$CLUSTER_PROFILE_DIR/gce.json
-if [ -f "${SHARED_DIR}/gcp_min_permissions.json" ]; then
+if [[ "$(jq -r .type ${GOOGLE_CLOUD_KEYFILE_JSON} 2>/dev/null)" == "external_account" ]]; then
+  echo "$(date -u --rfc-3339=seconds) - Using WIF external_account credentials for GCD..."
+  export GOOGLE_APPLICATION_CREDENTIALS="${GOOGLE_CLOUD_KEYFILE_JSON}"
+elif [ -f "${SHARED_DIR}/gcp_min_permissions.json" ]; then
   echo "$(date -u --rfc-3339=seconds) - Using the IAM service account for the minimum permissions testing on GCP..."
   export GOOGLE_CLOUD_KEYFILE_JSON="${SHARED_DIR}/gcp_min_permissions.json"
 elif [ -f "${SHARED_DIR}/user_tags_sa.json" ]; then

@@ -107,12 +107,19 @@ function array_intersection_or_fallback() {
 }
 
 export GCP_SHARED_CREDENTIALS_FILE="${CLUSTER_PROFILE_DIR}/gce.json"
-GOOGLE_PROJECT_ID=$(jq -r .project_id ${GCP_SHARED_CREDENTIALS_FILE})
-sa_email=$(jq -r .client_email ${GCP_SHARED_CREDENTIALS_FILE})
-if ! gcloud auth list | grep -E "\*\s+${sa_email}"
-then
-  gcloud auth activate-service-account --key-file="${GCP_SHARED_CREDENTIALS_FILE}"
+CRED_TYPE=$(jq -r .type "${GCP_SHARED_CREDENTIALS_FILE}")
+if [[ "${CRED_TYPE}" == "external_account" ]]; then
+  GOOGLE_PROJECT_ID="$(< ${CLUSTER_PROFILE_DIR}/openshift_gcp_project)"
+  gcloud auth login --cred-file="${GCP_SHARED_CREDENTIALS_FILE}" --quiet
   gcloud config set project "${GOOGLE_PROJECT_ID}"
+else
+  GOOGLE_PROJECT_ID=$(jq -r .project_id ${GCP_SHARED_CREDENTIALS_FILE})
+  sa_email=$(jq -r .client_email ${GCP_SHARED_CREDENTIALS_FILE})
+  if ! gcloud auth list | grep -E "\*\s+${sa_email}"
+  then
+    gcloud auth activate-service-account --key-file="${GCP_SHARED_CREDENTIALS_FILE}"
+    gcloud config set project "${GOOGLE_PROJECT_ID}"
+  fi
 fi
 
 # As a temporary workaround of https://redhat.atlassian.net/browse/OCPBUGS-78431, 
