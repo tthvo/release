@@ -5808,8 +5808,8 @@ presubmits:
     branches:
     - ^main$
     - ^main-
-    cluster: build13
-    context: ci/prow/e2e-gcd
+    cluster: build07
+    context: ci/prow/e2e-gcd-techpreview
     decorate: true
     decoration_config:
       sparse_checkout_files:
@@ -5822,12 +5822,12 @@ presubmits:
     labels:
       ci-operator.openshift.io/cloud: gcp
       ci-operator.openshift.io/cloud-cluster-profile: gcd
-      ci-operator.openshift.io/cluster: build13
+      ci-operator.openshift.io/cluster: build07
       ci.openshift.io/generator: prowgen
       pj-rehearse.openshift.io/can-be-rehearsed: "true"
-    name: pull-ci-openshift-installer-main-e2e-gcd
+    name: pull-ci-openshift-installer-main-e2e-gcd-techpreview
     optional: true
-    rerun_command: /test e2e-gcd
+    rerun_command: /test e2e-gcd-techpreview
     spec:
       containers:
       - args:
@@ -5836,7 +5836,7 @@ presubmits:
         - --lease-server-credentials-file=/etc/boskos/credentials
         - --report-credentials-file=/etc/report/credentials
         - --secret-dir=/secrets/ci-pull-credentials
-        - --target=e2e-gcd
+        - --target=e2e-gcd-techpreview
         command:
         - ci-operator
         env:
@@ -5892,7 +5892,7 @@ presubmits:
       - name: result-aggregator
         secret:
           secretName: result-aggregator
-    trigger: (?m)^/test( | .* )e2e-gcd,?($|\s.*)
+    trigger: (?m)^/test( | .* )e2e-gcd-techpreview,?($|\s.*)
   - agent: kubernetes
     always_run: false
     branches:

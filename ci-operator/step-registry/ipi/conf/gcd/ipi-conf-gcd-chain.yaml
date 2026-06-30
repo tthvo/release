@@ -9,5 +9,5 @@ chain:
   - ref: ipi-install-monitoringpvc
   documentation: >-
     This chain generates an install-config.yaml configured to run clusters
-    on Google Cloud Dedicated (GCD). Sets up WIF authentication before
-    configuring GCP-specific install-config fields.
+    on Google Cloud Dedicated (GCD). Validates the WIF credential config
+    before configuring GCP-specific install-config fields.

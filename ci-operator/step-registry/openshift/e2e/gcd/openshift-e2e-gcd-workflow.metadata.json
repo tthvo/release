@@ -2,6 +2,7 @@
 	"path": "openshift/e2e/gcd/openshift-e2e-gcd-workflow.yaml",
 	"owners": {
 		"approvers": [
+			"barbacbd",
 			"patrickdillon",
 			"rochacbruno",
 			"tthvo"
