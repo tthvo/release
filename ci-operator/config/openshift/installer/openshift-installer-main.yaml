@@ -541,6 +541,7 @@ tests:
       AWS_PROFILE: hub
       COMPUTE_NODE_REPLICAS: "2"
       GOOGLE_CLOUD_UNIVERSE_DOMAIN: apis-berlin-build0.goog
+      PUBLISH: Internal
     workflow: openshift-e2e-gcd
 - as: e2e-gcp-ovn
   run_if_changed: (gcp|google)
