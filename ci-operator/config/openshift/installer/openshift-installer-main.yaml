@@ -538,6 +538,7 @@ tests:
     cluster_profile: gcd
     env:
       AWS_PROFILE: hub
+      BASE_DOMAIN: ci.gcd.devcluster.openshift.com
       COMPUTE_NODE_REPLICAS: "2"
       FEATURE_SET: TechPreviewNoUpgrade
       GOOGLE_CLOUD_UNIVERSE_DOMAIN: apis-berlin-build0.goog
