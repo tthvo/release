@@ -163,6 +163,9 @@ tests:
     observers:
       enable:
       - observers-resource-watch
+    test:
+    - ref: aws-provision-iam-master-policy
+    - ref: openshift-e2e-test
     workflow: openshift-upgrade-aws-single-node
 - as: e2e-aws-upgrade-ovn-single-node-os-rhel10
   interval: 24h
@@ -177,6 +180,7 @@ tests:
       enable:
       - observers-resource-watch
     test:
+    - ref: aws-provision-iam-master-policy
     - ref: single-node-e2e-test
     - ref: mco-conf-day2-os-image-stream-default
     workflow: openshift-upgrade-aws-single-node
@@ -190,6 +194,9 @@ tests:
     observers:
       enable:
       - observers-resource-watch
+    test:
+    - ref: aws-provision-iam-master-policy
+    - ref: openshift-e2e-test
     workflow: openshift-upgrade-aws-single-node-realtime
 - as: e2e-vsphere-upgrade
   cron: 49 2 * * 4
@@ -228,6 +235,7 @@ tests:
       enable:
       - observers-resource-watch
     test:
+    - ref: aws-provision-iam-master-policy
     - ref: network-flow-matrix-tests
     - ref: single-node-e2e-test
     workflow: openshift-upgrade-aws-single-node

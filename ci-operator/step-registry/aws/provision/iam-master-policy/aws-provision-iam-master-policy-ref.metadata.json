@@ -1,0 +1,11 @@
+{
+	"path": "aws/provision/iam-master-policy/aws-provision-iam-master-policy-ref.yaml",
+	"owners": {
+		"approvers": [
+			"mfbonfigli",
+			"mtulio",
+			"patrickdillon",
+			"tthvo"
+		]
+	}
+}

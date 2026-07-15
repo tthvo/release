@@ -40,6 +40,7 @@ tests:
         requests:
           cpu: 100m
           memory: 200Mi
+    - ref: aws-provision-iam-master-policy
     - ref: openshift-e2e-test
     workflow: openshift-upgrade-aws-ovn
 zz_generated_metadata:

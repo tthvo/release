@@ -1,0 +1,18 @@
+ref:
+  as: aws-provision-iam-master-policy
+  from_image:
+    namespace: ocp
+    name: "5.0"
+    tag: upi-installer
+  grace_period: 10m
+  commands: aws-provision-iam-master-policy-commands.sh
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+  documentation: |-
+    Creates a managed AWS IAM policy with permissions added in OCP 5.0 and
+    attaches it to the cluster's master node role. Intended to run before an
+    upgrade from 4.x to 5.0, so that the upgraded control plane has the IAM
+    permissions it expects. Skips automatically if the cluster is already on
+    5.0+ or if the platform is not AWS.
